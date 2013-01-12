@@ -21,7 +21,6 @@
 	/*
 		DROP TABLE IF EXISTS `performance`;
 		CREATE TABLE `performance` (
-		  `id` double NOT NULL AUTO_INCREMENT,
 		  `zeitstempel` int(11) NOT NULL,
 		  `tps` int(11) NOT NULL,
 		  `players` int(11) NOT NULL,
