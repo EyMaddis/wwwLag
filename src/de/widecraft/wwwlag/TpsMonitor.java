@@ -1,3 +1,5 @@
+// credits to this library goes to Mshax085
+
 package de.widecraft.wwwlag;
 
 import java.util.LinkedList;
