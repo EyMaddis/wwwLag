@@ -24,8 +24,7 @@
 		  `zeitstempel` int(11) NOT NULL,
 		  `tps` int(11) NOT NULL,
 		  `players` int(11) NOT NULL,
-		  `memory` float NOT NULL,
-		  PRIMARY KEY (`id`)
+		  `memory` float NOT NULL
 		) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 */
 	@mysql_connect($db_host, $db_user, $db_pass);
