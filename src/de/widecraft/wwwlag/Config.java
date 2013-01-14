@@ -18,6 +18,7 @@ public class Config {
 		config.addDefault("url", "http://www.widecraft.de/wwwlag.php");
 		config.addDefault("token", "widecraft.de");
 		config.addDefault("interval", 10);
+		config.addDefault("debug", "true");
 		
 		config.options().copyDefaults(true);
 		plugin.saveConfig();

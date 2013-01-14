@@ -6,6 +6,9 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.logging.Logger;
 
+import org.bukkit.ChatColor;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -43,6 +46,33 @@ public class wwwlag extends JavaPlugin{
 		}, 1200L, this.config.int_get_value("interval")*20*60);
 	}
 	
+	public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args){
+		 if(commandLabel.equalsIgnoreCase("wwwlag")){
+			 if (args.length > 0)
+			 {
+				 if (args[0].equalsIgnoreCase("update")) {
+					 if (sender.hasPermission("wwwlag.update")) {
+						Runtime runtime = Runtime.getRuntime();
+				    	String tps = Float.toString(this.tpsMeter.getAverageTps());
+				    	String freemem = String.valueOf(runtime.freeMemory() / 1024 / 1024);
+				    	sender.sendMessage("[wwwLag] " + this.call_url("tps="+tps+"&memory="+freemem+"&players="+ String.valueOf(this.getServer().getOnlinePlayers().length)));
+					 } else {
+						 sender.sendMessage(ChatColor.RED + "[wwwLag] You don't have permission to to this (wwwlag.update)");
+					 }
+				 } else {
+					 sender.sendMessage(ChatColor.GOLD + "wwwLag v"+this.version+" by sourcemaker installed.");
+					 sender.sendMessage(ChatColor.GOLD + "Use /wwwlag update to send performance data manually.");
+				 }
+			 } else {
+				 sender.sendMessage(ChatColor.GOLD + "wwwLag v"+this.version+" by sourcemaker installed.");
+				 sender.sendMessage(ChatColor.GOLD + "Use /wwwlag update to send performance data manually.");
+			 }
+			 			 
+		 }
+		return true;
+			 
+	}
+	
 public String call_url(String call) {
 		
 		String result = "";	
@@ -62,7 +92,7 @@ public String call_url(String call) {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		this.log.info("[wwwLog] " + result);
+		if (this.config.get_value("debug").equalsIgnoreCase("true")) { this.log.info("[wwwLog] " + result); }
 		return result;
 	}
 }

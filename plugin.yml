@@ -2,3 +2,13 @@ name: wwwLag
 main: de.widecraft.wwwlag.wwwlag
 author: sourcemaker
 version: 1.0.1
+website: http://www.widecraft.de
+
+commands:
+  wwwlag:
+    description: wwwlag
+    
+permissions:
+  wwwlag.update:
+    description: Allows to update manually
+    default: op
