@@ -1,6 +1,7 @@
 package de.widecraft.wwwlag;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.logging.Logger;
@@ -23,6 +24,13 @@ public class wwwlag extends JavaPlugin{
 		
 		this.log.info("[wwwLag v"+this.version+"] Plugin enabling...");
 		config.load();
+		
+		try {
+		    Metrics metrics = new Metrics(this);
+		    metrics.start();
+		} catch (IOException e) {
+		    // Failed to submit the stats :-(
+		}
 		
 		this.getServer().getScheduler().runTaskTimerAsynchronously(this, new Runnable() {
 		    @Override  
