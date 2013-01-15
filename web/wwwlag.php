@@ -10,6 +10,8 @@
 	$width  = "100%";
 	$how_many_days = 7;
 	$show_memory = false;
+	$show_chunks = false;
+	$show_entities = false;
 	
 	// database connection
 	$db_host	=	"localhost";
@@ -57,24 +59,36 @@
                         data.addColumn('date', 'Date');
                         data.addColumn('number', 'TPS');
                         data.addColumn('number', 'Players');
-						data.addColumn('number', 'Chunks');
-						data.addColumn('number', 'Entities');
-						<?php
-						if ($show_memory == true) {
-                        echo "data.addColumn('number', 'Memory');";
-						}
-						?>
+                        <?php
+                        
+                        if ($show_chunks == true) {
+                        	echo "data.addColumn('number', 'Chunks');";
+                        }
+                        if ($show_entities == true) {
+                        	echo "data.addColumn('number', 'Entities');";
+                        }
+			if ($show_memory == true) {
+				echo "data.addColumn('number', 'Memory');";
+			}
+			
+			?>
 						
                         data.addRows([
 						<?php
 							$sql	=	"SELECT * FROM `performance` WHERE `zeitstempel` > ".($how_many_days*24*60*60)." ORDER BY `zeitstempel` ASC";
 							$res	=	@mysql_query($sql);
 							while ($dat = @mysql_fetch_array($res)) {							
-								echo "[new Date(".($dat['zeitstempel']*1000)."), ".$dat['tps'].", ".$dat['players'].",".$dat['chunks'].", ".$dat['entities'];
+								echo "[new Date(".($dat['zeitstempel']*1000)."), ".$dat['tps'].", ".$dat['players'];
+								if ($show_chunks == true) {
+									echo ",".$dat['chunks'];
+								}
+								if ($show_entities == true) {
+									echo ", ".$dat['entities'];
+								}
 								if ($show_memory == true) {
 									echo ", ".$dat['memory']."],";
 								} else {
-									echo "], ";	
+									echo "], ";
 								}
 							}
 						
