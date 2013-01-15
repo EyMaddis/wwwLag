@@ -31,6 +31,31 @@
 		  `entities` int(11) NOT NULL
 		) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 */
+
+	if ($_GET['install'] == "true")
+	{
+		mysql_connect($db_host, $db_user, $db_pass) or die("Could not connect to database. Please verify $db_host, $db_user and $db_pass");
+		mysql_select_db($db_name) or die("Database connection successfull, but could not select database. Please check $db_name");
+		
+		if (mysql_num_rows( mysql_query("SHOW TABLES LIKE 'performance'"))) {
+			echo "Database connection successfull, database selectable, tables already exists. You're finished.";
+		} else
+		{
+			echo "Database connection successfull, database selectable, table is now being created... hold on 10 seconds and refesh the page.";
+			$sql = "CREATE TABLE `performance` (
+		  `zeitstempel` int(11) NOT NULL,
+		  `tps` int(11) NOT NULL,
+		  `players` int(11) NOT NULL,
+		  `memory` float NOT NULL,
+		  `chunks` int(11) NOT NULL,
+		  `entities` int(11) NOT NULL
+		) ENGINE=MyISAM DEFAULT CHARSET=latin1;";
+			@mysql_query($sql) or die("Table can't be created. Please check your user-rights and install manually. For this check out: https://github.com/WideCraft/wwwLag/blob/master/web/wwwlag.php#L22");
+		}
+		
+		die();
+	}
+	
 	@mysql_connect($db_host, $db_user, $db_pass);
 	@mysql_select_db($db_name);
 	
@@ -109,5 +134,4 @@
                 </html>
             <?php
 	}
-
 ?>
