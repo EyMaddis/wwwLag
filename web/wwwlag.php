@@ -24,7 +24,9 @@
 		  `zeitstempel` int(11) NOT NULL,
 		  `tps` int(11) NOT NULL,
 		  `players` int(11) NOT NULL,
-		  `memory` float NOT NULL
+		  `memory` float NOT NULL,
+		  `chunks` int(11) NOT NULL,
+		  `entities` int(11) NOT NULL
 		) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 */
 	@mysql_connect($db_host, $db_user, $db_pass);
@@ -37,8 +39,10 @@
 			$tps		=	floatval($_GET['tps']);
 			$memory		=	floatval($_GET['memory']);
 			$players	=	intval($_GET['players']);
-			$sql	=	"INSERT INTO `performance` (`tps`, `players`, `zeitstempel`, `memory`) VALUES ('".$tps."','".$players."','".time()."','".$memory."')";
-			$res	=	@mysql_query($sql);
+			$entities	=	intval($_GET['entities']);
+			$chunks		=	intval($_GET['chunks']);
+			$sql	=	"INSERT INTO `performance` (`tps`, `players`, `zeitstempel`, `memory`, `chunks`, `entities`) VALUES ('".$tps."','".$players."','".time()."','".$memory."', '".$chunks."', '".$entities."')";
+			$res	=	@mysql_query($sql) or die($sql);
 			echo "New performance data uploaded";
 		} else {
 			?>
@@ -53,6 +57,8 @@
                         data.addColumn('date', 'Date');
                         data.addColumn('number', 'TPS');
                         data.addColumn('number', 'Players');
+						data.addColumn('number', 'Chunks');
+						data.addColumn('number', 'Entities');
 						<?php
 						if ($show_memory == true) {
                         echo "data.addColumn('number', 'Memory');";
@@ -64,7 +70,7 @@
 							$sql	=	"SELECT * FROM `performance` WHERE `zeitstempel` > ".($how_many_days*24*60*60)." ORDER BY `zeitstempel` ASC";
 							$res	=	@mysql_query($sql);
 							while ($dat = @mysql_fetch_array($res)) {							
-								echo "[new Date(".($dat['zeitstempel']*1000)."), ".$dat['tps'].", ".$dat['players'];
+								echo "[new Date(".($dat['zeitstempel']*1000)."), ".$dat['tps'].", ".$dat['players'].",".$dat['chunks'].", ".$dat['entities'];
 								if ($show_memory == true) {
 									echo ", ".$dat['memory']."],";
 								} else {

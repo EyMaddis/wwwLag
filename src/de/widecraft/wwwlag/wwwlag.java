@@ -7,6 +7,7 @@ import java.net.URL;
 import java.util.logging.Logger;
 
 import org.bukkit.ChatColor;
+import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.PluginDescriptionFile;
@@ -38,10 +39,7 @@ public class wwwlag extends JavaPlugin{
 		this.getServer().getScheduler().runTaskTimerAsynchronously(this, new Runnable() {
 		    @Override  
 		    public void run() {
-		    	Runtime runtime = Runtime.getRuntime();
-		    	String tps = Float.toString(tpsMeter.getAverageTps());
-		    	String freemem = String.valueOf(runtime.freeMemory() / 1024 / 1024);
-		        call_url("tps="+tps+"&memory="+freemem+"&players="+ String.valueOf(getServer().getOnlinePlayers().length));
+		    	update();
 		    }
 		}, 1200L, this.config.int_get_value("interval")*20*60);
 	}
@@ -52,10 +50,7 @@ public class wwwlag extends JavaPlugin{
 			 {
 				 if (args[0].equalsIgnoreCase("update")) {
 					 if (sender.hasPermission("wwwlag.update")) {
-						Runtime runtime = Runtime.getRuntime();
-				    	String tps = Float.toString(this.tpsMeter.getAverageTps());
-				    	String freemem = String.valueOf(runtime.freeMemory() / 1024 / 1024);
-				    	sender.sendMessage("[wwwLag] " + this.call_url("tps="+tps+"&memory="+freemem+"&players="+ String.valueOf(this.getServer().getOnlinePlayers().length)));
+				    	sender.sendMessage("[wwwLag] " + this.update());
 					 } else {
 						 sender.sendMessage(ChatColor.RED + "[wwwLag] You don't have permission to to this (wwwlag.update)");
 					 }
@@ -73,10 +68,24 @@ public class wwwlag extends JavaPlugin{
 			 
 	}
 	
-public String call_url(String call) {
+public String update() {
+		String call = "";
+	
+		Runtime runtime = Runtime.getRuntime();
+		String tps = Float.toString(tpsMeter.getAverageTps());
+		String freemem = String.valueOf(runtime.freeMemory() / 1024 / 1024);
+		
+		Integer loadedchunks = 0;
+		Integer entities = 0;
+		
+		for (World w : this.getServer().getWorlds())
+		{
+				loadedchunks = loadedchunks + w.getLoadedChunks().length;
+				entities = entities + w.getEntities().size();
+		}
 		
 		String result = "";	
-		call = this.config.get_value("url") + "?token="+this.config.get_value("token") + "&" + call;
+		call = this.config.get_value("url") + "?token="+this.config.get_value("token") + "&" + "tps="+tps+"&memory="+freemem+"&players="+ String.valueOf(getServer().getOnlinePlayers().length+"&entities="+entities+"&chunks="+loadedchunks);
 
 		try {
 		    // Create a URL for the desired page
