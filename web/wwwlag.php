@@ -56,6 +56,9 @@
 		die();
 	}
 	
+	@ini_set("display_errors", "off");
+	@error_reporting(0);
+	
 	@mysql_connect($db_host, $db_user, $db_pass);
 	@mysql_select_db($db_name);
 	
