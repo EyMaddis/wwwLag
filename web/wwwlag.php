@@ -18,19 +18,7 @@
 	$db_user	=	"dbuser";
 	$db_pass	=	"password";
 	$db_name	=	"table-name";
-	
-	// table does not exists? 
-	/*
-		DROP TABLE IF EXISTS `performance`;
-		CREATE TABLE `performance` (
-		  `zeitstempel` int(11) NOT NULL,
-		  `tps` int(11) NOT NULL,
-		  `players` int(11) NOT NULL,
-		  `memory` float NOT NULL,
-		  `chunks` int(11) NOT NULL,
-		  `entities` int(11) NOT NULL
-		) ENGINE=MyISAM DEFAULT CHARSET=latin1;
-*/
+
 
 	if ($_GET['install'] == "true")
 	{
@@ -61,6 +49,18 @@
 	
 	@mysql_connect($db_host, $db_user, $db_pass);
 	@mysql_select_db($db_name);
+
+	if (isset($_GET['token']))
+	{
+		if ($_GET['token'] != $token)
+		{
+			die("Invalid token");
+		}
+		if (in_array($_SERVER['REMOTE_ADDR'],$allowed_ip))
+		{
+			die("IP not whitelisted");	
+		}
+	}
 	
 	if (
 		($_GET['token'] == $token) && 
