@@ -56,7 +56,7 @@
 		{
 			die("Invalid token");
 		}
-		if (in_array($_SERVER['REMOTE_ADDR'],$allowed_ip))
+		if (!in_array($_SERVER['REMOTE_ADDR'],$allowed_ip))
 		{
 			die("IP not whitelisted");	
 		}
